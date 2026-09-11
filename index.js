@@ -20,6 +20,17 @@ const pool = new Pool({
 });
 
 
+app.get('/users', async (req, res) => {
+  const client = await pool.connect()
+  try {
+    const result = await client.query('SELECT * from users')
+    res.json(result.rows)
+  } catch (err) {
+    console.error(error, err.message)
+  } finally {
+    client.release()
+  }
+})
 
 //Getting Booking Result
 app.post('/result', async (req, res) => {
@@ -91,7 +102,6 @@ app.put('/update/:postId', async (req, res) => {
     client.release()
   }
 })
-
 //delete bookings
 app.delete("/booking/:postId", async (req, res) => {
   const client = await pool.connect()
