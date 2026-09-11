@@ -19,43 +19,9 @@ const pool = new Pool({
   },
 });
 
-app.get('/bookings', async (req, res) => {
-  const client = await pool.connect()
-  try {
-    const result = await client.query("SELECT * from bookings")
-    res.json(result.rows)
-  } catch (err) {
-    console.error(error, err.message)
-  } finally {
-    client.release()
-  }
-})
 
-app.get('/users', async (req, res) => {
-  const client = await pool.connect()
-  try {
-    const result = await client.query('SELECT * from users')
-    res.json(result.rows)
-  } catch (err) {
-    console.error(error, err.message)
-  } finally {
-    client.release()
-  }
-})
 
-app.get('/bookings/:userId', async (req, res) => {
-  const { userId } = req.params
-  const client = await pool.connect()
-  try {
-    const result = await client.query('SELECT * from bookings WHERE user_id =$1', [userId])
-    res.json(result.rows)
-  } catch (error) {
-    console.error(error, error.message)
-  } finally {
-    client.release()
-  }
-})
-
+//Getting Booking Result
 app.post('/result', async (req, res) => {
   const { phone_number } = req.body
   const client = await pool.connect()
@@ -72,6 +38,7 @@ app.post('/result', async (req, res) => {
   }
 })
 
+// Create new user 
 app.post('/newuser', async (req, res) => {
   const client = await pool.connect()
   const { name, phone_number, email } = req.body
@@ -87,6 +54,7 @@ app.post('/newuser', async (req, res) => {
   }
 })
 
+//Create bookings based on user 
 app.post('/newbooking/:userId', async (req, res) => {
   const client = await pool.connect()
   const { userId } = req.params
@@ -105,6 +73,7 @@ app.post('/newbooking/:userId', async (req, res) => {
   }
 })
 
+//update bookings
 app.put('/update/:postId', async (req, res) => {
   const client = await pool.connect()
   const { title, description, date_now, time_now, class_type } = req.body
@@ -123,6 +92,7 @@ app.put('/update/:postId', async (req, res) => {
   }
 })
 
+//delete bookings
 app.delete("/booking/:postId", async (req, res) => {
   const client = await pool.connect()
   const { postId } = req.params
