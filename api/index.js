@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
 const { stripTypeScriptTypes } = require("module");
 
 let app = express();
+
 const allowedOrigins = [
   "https://module-3-frontend.vercel.app",
   "http://localhost:5173", // Optional: for local Vite testing
