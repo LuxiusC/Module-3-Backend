@@ -3,7 +3,7 @@ let express = require("express");
 let path = require("path");
 const cors = require("cors");
 const { Pool } = require("@neondatabase/serverless");
-const { DATABASE_URL, SECRET_KEY } = process.env;
+const { DATABASE_URL } = process.env;
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { stripTypeScriptTypes } = require("module");
@@ -140,5 +140,7 @@ app.delete("/booking/:postId", async (req, res) => {
     client.release()
   }
 })
+
+
 
 module.exports = app
