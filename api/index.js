@@ -2,24 +2,24 @@ require("dotenv").config();
 let express = require("express");
 let path = require("path");
 const cors = require("cors");
-const { Pool } = require("pg");
+const { Pool } = require("@neondatabase/serverless");
 const { DATABASE_URL, SECRET_KEY } = process.env;
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { stripTypeScriptTypes } = require("module");
 
 let app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'https://module-3-frontend.vercel.app'
+}));
+
 app.use(express.json());
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
 });
 
-
+//get user data for userContext (userContext)
 app.get('/users', async (req, res) => {
   const client = await pool.connect()
   try {
@@ -32,7 +32,7 @@ app.get('/users', async (req, res) => {
   }
 })
 
-//Getting Booking Result
+//Getting Booking Result (students.jsx)
 app.post('/result', async (req, res) => {
   const { phone_number } = req.body
   const client = await pool.connect()
@@ -49,7 +49,7 @@ app.post('/result', async (req, res) => {
   }
 })
 
-// Create new user 
+// Create new user (User.jsx)
 app.post('/newuser', async (req, res) => {
   const client = await pool.connect()
   const { name, phone_number, email } = req.body
@@ -65,7 +65,7 @@ app.post('/newuser', async (req, res) => {
   }
 })
 
-//Create bookings based on user 
+//Create bookings based on user (Booking.jsx)
 app.post('/newbooking/:userId', async (req, res) => {
   const client = await pool.connect()
   const { userId } = req.params
@@ -84,7 +84,7 @@ app.post('/newbooking/:userId', async (req, res) => {
   }
 })
 
-//update bookings
+//update bookings (Students.jsx)
 app.put('/update/:postId', async (req, res) => {
   const client = await pool.connect()
   const { title, description, date_now, time_now, class_type } = req.body
@@ -102,7 +102,7 @@ app.put('/update/:postId', async (req, res) => {
     client.release()
   }
 })
-//delete bookings
+//delete bookings (students.jsx)
 app.delete("/booking/:postId", async (req, res) => {
   const client = await pool.connect()
   const { postId } = req.params
@@ -116,11 +116,4 @@ app.delete("/booking/:postId", async (req, res) => {
   }
 })
 
-
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname + "/index.html"));
-});
-
-app.listen(3000, () => {
-  console.log("App is listening on port 3000");
-});
+module.exports = app
