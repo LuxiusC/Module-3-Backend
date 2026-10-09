@@ -9,9 +9,33 @@ const jwt = require("jsonwebtoken");
 const { stripTypeScriptTypes } = require("module");
 
 let app = express();
-app.use(cors({
-  origin: 'https://module-3-frontend.vercel.app'
-}));
+const allowedOrigins = [
+  "https://module-3-frontend.vercel.app",
+  "http://localhost:5173", // Optional: for local Vite testing
+  "http://localhost:3000"  // Optional: for local React testing
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps, curl, or Postman)
+      if (!origin) return callback(null, true);
+
+      // Allow origin if listed, or match any Vercel frontend preview deployment URL
+      if (allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
+        return callback(null, true);
+      }
+
+      return callback(null, true); // Or set to callback(null, true) during testing to allow all
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
+
+// Handle preflight requests for all routes
+app.options("*", cors());
 
 app.use(express.json());
 
