@@ -2,18 +2,18 @@ require("dotenv").config();
 let express = require("express");
 let path = require("path");
 const cors = require("cors");
-const { Pool } = require("@neondatabase/serverless");
+const { Pool, neonConfig } = require("@neondatabase/serverless");
 const { DATABASE_URL } = process.env
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-
+const ws = require("ws");
 let app = express();
 
 app.use(cors());
 app.use(express.json());
 
+neonConfig.webSocketConstructor = ws;
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
   }
