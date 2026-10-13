@@ -1,43 +1,9 @@
 {
     "version": 2,
-    "builds": [
+    "rewrites": [
         {
-            "src": "api/index.js",
-            "use": "@vercel/node"
-        }
-    ],
-    "routes": [
-        {
-            "src": "/api/(.*)",
-            "dest": "/api/index.js"
-        },
-        {
-            "src": "/users",
-            "dest": "/api/index.js"
-        },
-        {
-            "src": "/result",
-            "dest": "/api/index.js"
-        },
-        {
-            "src": "/newuser",
-            "dest": "/api/index.js"
-        },
-        {
-            "src": "/newbooking/(.*)",
-            "dest": "/api/index.js"
-        },
-        {
-            "src": "/update/(.*)",
-            "dest": "/api/index.js"
-        },
-        {
-            "src": "/booking/(.*)",
-            "dest": "/api/index.js"
-        },
-        {
-            "src": "/(.*)",
-            "dest": "/index.html"
+            "source": "/(.*)",
+            "destination": "/api/index.js"
         }
     ]
 }

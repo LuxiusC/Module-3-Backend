@@ -17,7 +17,7 @@ const pool = new Pool({
 });
 
 app.get('/', (req, res) => {
-  res.json({ message: "Backend API is online and running!" });
+  res.sendFile(path.join(__dirname, '../index.html'));
 });
 
 app.get('/users', async (req, res) => {
